@@ -18,7 +18,7 @@
 
 
 <body style="background: url('../img/bg-01.jpg'); background-size:cover">
-   
+
     <div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
@@ -61,37 +61,18 @@
 
                 <div class="iniciar-redes">
                     <span>Iniciar con:</span>
-                    <i class="fa fa-facebook-square"></i>
-                    <i class="fa fa-envelope-o"></i>
-                </div>
-
-<<<<<<< HEAD
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-
-                    <a href="{{ route('social.oauth', 'facebook') }}" class="btn btn-primary btn-block">
-                        Login with Facebook
+                    <a href="{{ route('social.oauth', 'facebook') }}">
+                        <i class="fa fa-facebook-square"></i>
                     </a>
-                    <a href="{{ route('social.oauth', 'google') }}" class="btn btn-danger btn-block">
-                        Login with Google
+                    <a href="{{ route('social.oauth', 'google') }}">
+                        <i class="fa fa-envelope-o"></i>
                     </a>
-=======
-                <div class="registrate">
-                    ¿Aun no tienes una cuenta? <a href="{{ route('register') }}">Registrate</a>
->>>>>>> 3fe39ff3142bc7db7e34af298f5940827576e861
                 </div>
-				
 			</div>
 		</div>
-	</div>	
+	</div>
 
-    
+
 <!-- Scripts -->
 <script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
 <script src="{{ asset('js/login.js') }}"></script>
