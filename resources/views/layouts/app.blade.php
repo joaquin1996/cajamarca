@@ -7,72 +7,89 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- Favicons -->
+    <link href="{{asset('img/logo-color.png')}}" rel="icon">
+    <link href="{{asset('img/logo-color.png')}}" rel="apple-touch-icon">
+    
     <title>TM Travel</title>
 
     <!-- Styles -->
     <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/mdbootstrap/mdb.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/iconic/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/ionicons.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <img src="{{ asset('img/bg-03.jpg') }}" class="fondo" alt="">
+    <!-- Sidebar -->
+  <div id="wrapper">
+    <div id="sidebar-wrapper" class="sidebar-fixed position-fixed">
+      
+      <a href="#" class="menu-toggle icon-menu-responsive"><i class="ion ion-ios-close"></i></a>
+      <div class="datos-usuario row">
+          <div class="avatar">
+            <img src="{{ asset('img/img-user.png') }}" style="width: 100%" alt="">
+          </div>
+          <div class="username">
+            Hola {{auth()->user()->name}}
+          </div>
+      </div>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+      <div class="list-group list-group-flush">
+        <a href="#" class="list-group-item">
+          <img src="{{ asset('img/icons/lugares.png') }}" alt=""> LUGARES
+        </a>
+        
+        <a href="#" class="list-group-item">
+            <img src="{{ asset('img/icons/guiadeempresas.png') }}" alt=""> GUIA DE EMPRESAS
+        </a>
 
-                    </ul>
+        <a href="#" class="list-group-item">
+            <img src="{{ asset('img/icons/marketplace-w.png') }}" alt=""> MARKETPLACE
+        </a>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-                            
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+        <a href="#" class="list-group-item">
+            <img src="{{ asset('img/icons/utilidades-w.png') }}" alt=""> UTILIDADES
+        </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <a href="#" class="list-group-item">
+            <img src="{{ asset('img/icons/ajustes.png') }}" alt=""> AJUSTES
+        </a>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        <a class="list-group-item" href="/logout"
+            onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
+        
+            <img src="{{ asset('img/icons/logout.png') }}" alt=""> SALIR
+            <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </a> 
+
+      </div>
+
     </div>
+  </div>
+  <!-- Sidebar -->
+
+<div class="content">
+
+    <!-- desplegar menu -->
+    <nav  class="navbar">
+        <!-- Brand -->
+        <a id="nav" class="menu-toggle navbar-brand menu-boton" href="#">
+          <i class="fa fa-bars"></i>
+        </a>
+    </nav>
+    <!-- end desplegar menu -->
+
+    @yield('content')
 
 
 <!-- Scripts -->
 <script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/login.js') }}"></script>
+<script src="{{ asset('vendor/mdbootstrap/mdb.min.js') }}"></script>
+<script src="{{ asset('js/main.js') }}"></script>
