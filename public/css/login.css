@@ -528,6 +528,8 @@ iframe {
   position: absolute;
   bottom: 13px;
   color: #41dc70;
+  width: 20px;
+  font-size: 18px;
 }
 
 .icon-right {
