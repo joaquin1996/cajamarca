@@ -7,7 +7,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>TM Travel</title>
+    <!-- Favicons -->
+    <link href="{{asset('img/logo-color.png')}}" rel="icon">
+    <link href="{{asset('img/logo-color.png')}}" rel="apple-touch-icon">
+
+    <title>TM Travel - Registrate</title>
 
     <!-- Styles -->
     <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -30,7 +34,7 @@
                     </div>
 
 					<div class="wrap-input100 validate-input">
-                        <i class="fa fa-user icon-left"></i>
+                        <img src="{{ asset('img/icons/user.png') }}" class="icon-left" alt="">
                         <input class="input100" type="text" name="name" id="name" autocomplete="off" required>
                         <span class="focus-input100" data-placeholder="Nombre de usuario"></span>
                     </div>
@@ -42,7 +46,7 @@
                     </div>
 
 					<div class="wrap-input100 validate-input" data-validate="Enter password">
-                        <i class="zmdi zmdi-lock icon-left"></i>
+                        <img src="{{ asset('img/icons/pass.png') }}" class="icon-left" alt="">
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye icon-right"></i>
 						</span>
@@ -51,7 +55,7 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Enter password">
-                        <i class="zmdi zmdi-lock icon-left"></i>
+                        <img src="{{ asset('img/icons/pass.png') }}" class="icon-left" alt="">
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye icon-right"></i>
 						</span>
