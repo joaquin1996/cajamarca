@@ -28,6 +28,8 @@ class User extends Authenticatable
         'access_token'
     ];
 
+    protected $guarded = ['*'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
