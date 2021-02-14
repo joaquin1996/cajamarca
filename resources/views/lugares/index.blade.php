@@ -7,6 +7,28 @@
 <style>
 	body { margin: 0; padding: 0; }
 	#map { position: absolute; top: 0; bottom: 0; width: 100%; height: 500px;}
+    #buttons {
+        width: 90%;
+        margin: 0 auto;
+        display: inline-flex;
+        justify-content: center;
+    }
+    .button {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 3px;
+        margin-top: 10px;
+        margin-left: 1px;
+        margin-right: 1px;
+        font-size: 12px;
+        text-align: center;
+        color: #fff;
+        background: #ee8a65;
+        font-family: sans-serif;
+        font-weight: bold;
+    }
 </style>
 </head>
 <body>
@@ -32,6 +54,11 @@ type="text/css"
         <div class="col-md-12">
             <div class="card">
                 <div id="map"></div>
+                <ul id="buttons">
+                    <li id="button-en" class="button">English</li>
+                    <li id="button-ru" class="button">Russian</li>
+                    <li id="button-es" class="button">Spanish</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -50,11 +77,24 @@ type="text/css"
             zoom: 14
         });
 
+        document.getElementById('buttons').addEventListener('click', function (event) {
+            var language = event.target.id.substr('button-'.length);
+            // Use setLayoutProperty to set the value of a layout property in a style layer.
+            // The three arguments are the id of the layer, the name of the layout property,
+            // and the new property value.
+            map.setLayoutProperty('country-label', 'text-field', [
+                'get',
+                'name_' + language
+            ]);
+        });
+
         var origin = [];
         var destinaion = [];
 
         var directions = new MapboxDirections({
-            accessToken: mapboxgl.accessToken
+            accessToken: mapboxgl.accessToken,
+            unit: "metric",
+            language: "es"
         });
         map.addControl(
             directions,
@@ -72,6 +112,8 @@ type="text/css"
             var lat = e.coords.latitude
             origin = [lon, lat];
             directions.setOrigin(origin);
+            getClimate(origin);
+            getElevation(origin);
         });
 
         var geocoder = new MapboxGeocoder({
@@ -83,8 +125,54 @@ type="text/css"
         geocoder.on('result', function(e) {
             destinaion = e.result.geometry.coordinates;
             directions.setDestination(destinaion);
+            getClimate(destinaion);
+            getElevation(destinaion);
         });
 
+        directions.on('route', function(e) {
+            console.log(e);
+        });
+
+        directions.on('origin', function(e) {
+            getElevation(e.feature.geometry.coordinates);
+        });
+
+        directions.on('destination', function(e) {
+            getElevation(e.feature.geometry.coordinates);
+        });
+
+        function getClimate(latLon) {
+            jQuery.ajax( {
+                type: 'GET',
+                url: "https://api.openweathermap.org/data/2.5/weather?lat="+latLon[1]+"&lon="+latLon[0]+"&lang=es&units=metric&appid=d501d7588e367900e084418b8b24deab",
+                success: function( data ) {
+                    console.log(data);
+                }
+            } );
+        }
+
+
+
+        function getElevation(latLon) {
+            // make API request
+            var query = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + latLon[0] + ',' + latLon[1] + '.json?layers=contour&limit=50&access_token=' + mapboxgl.accessToken;
+            $.ajax({
+                method: 'GET',
+                url: query,
+            }).done(function(data) {
+                var allFeatures = data.features;
+                // Create an empty array to add elevation data to
+                var elevations = [];
+                // For each returned feature, add elevation data to the elevations array
+                for (i = 0; i < allFeatures.length; i++) {
+                    elevations.push(allFeatures[i].properties.ele);
+                }
+                // In the elevations array, find the largest value
+                var highestElevation = Math.max(...elevations);
+                // Display the largest elevation value
+                console.log(highestElevation + ' meters');
+            });
+        }
 
     });
 </script>
