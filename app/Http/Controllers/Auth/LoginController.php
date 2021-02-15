@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -33,13 +34,19 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    public function show()
+    {
+        return view('auth.login');
+    }
+
     protected $providers = [
-        'facebook','google'
+        'facebook',
+        'google'
     ];
 
     public function redirectToProvider($driver)
     {
-        if( ! $this->isProviderAllowed($driver) ) {
+        if( !$this->isProviderAllowed($driver) ) {
             return $this->sendFailedResponse("{$driver} is not currently supported");
         }
 
@@ -100,7 +107,9 @@ class LoginController extends Controller
                 'provider_id' => $providerUser->getId(),
                 'access_token' => $providerUser->token,
                 // user can use reset password to create a password
-                'password' => ''
+                'password' => '',
+                'condition' => 1,
+                'idrol' => 2
             ]);
         }
 

@@ -71,12 +71,15 @@
 
                 <div class="iniciar-redes">
                     <span>Iniciar con:</span>
-                    <a href="{{ route('social.oauth', 'facebook') }}">
-                        <i class="fa fa-facebook-square"></i>
-                    </a>
-                    <a href="{{ route('social.oauth', 'google') }}">
-                        <i class="fa fa-envelope-o"></i>
-                    </a>
+                        <a href="{{ route('social.oauth', 'facebook') }}">
+                            <i class="fa fa-facebook-square"></i>
+                        </a>
+                        <a href="{{ route('social.oauth', 'google') }}">
+                            <i class="fa fa-envelope-o"></i>
+                        </a>
+                </div>
+                <div class="registrate">
+                    ¿Aun no tienes una cuenta? <a href="{{ route('register') }}">Registrate</a>
                 </div>
 
                 <div class="registrate">
