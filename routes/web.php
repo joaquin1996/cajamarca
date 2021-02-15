@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 // definir controladores para las rutas
 ///////////////////////////////////////////
 use App\Http\Controllers\LugaresController;
+use App\Http\Controllers\ActivitiesController;
+use App\Http\Controllers\CategoriesController;
 
 
 Route::get('/', function () {
@@ -33,8 +35,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // rutas para acceder con un usuario
 Route::group(['middleware' => 'auth'], function () {
     // establecemos el prefijo para el usar la app con los usuarios
-    Route::group(['prefix' => 'home'], function() { 
+    Route::group(['prefix' => 'home'], function() {
         // rutas para el modulo lugares
         Route::get('lugares',[LugaresController::class, 'index']);
+        //rutas para obtener los datos de las categorias
+        Route::get('categories-list',[CategoriesController::class, 'list'])->name('categories-list');
+        //rutas para obtener los datos de las actividades
+        Route::get('activities-list',[ActivitiesController::class, 'list'])->name('activities-list');
+        //rutas para obtener la actividad especifica
+        Route::get('activity/{id}',[LugaresController::class, 'show'])->name('activity');
     });
 });

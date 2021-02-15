@@ -13,12 +13,12 @@ class CreatePointsTable extends Migration
             $table->bigIncrements('id');
 		    $table->text('name');
 		    $table->text('description')->nullable();
-		    $table->float('lon')->nullable();
-		    $table->float('lat')->nullable();
-		    $table->float('elevation')->nullable();
-		    $table->float('temp')->nullable();
-		    $table->float('temp_min')->nullable();
-		    $table->float('temp_max')->nullable();
+		    $table->decimal('lon', 35,30)->nullable();
+		    $table->decimal('lat', 35,30)->nullable();
+		    $table->decimal('elevation', 10,2)->nullable();
+		    $table->decimal('temp', 5,2)->nullable();
+		    $table->decimal('temp_min', 5,2)->nullable();
+		    $table->decimal('temp_max', 5,2)->nullable();
             $table->timestamps();
         });
     }

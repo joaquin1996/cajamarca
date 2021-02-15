@@ -1,179 +1,90 @@
 @extends('layouts.app')
 
 @section('content')
-<script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
-<style>
-	body { margin: 0; padding: 0; }
-	#map { position: absolute; top: 0; bottom: 0; width: 100%; height: 500px;}
-    #buttons {
-        width: 90%;
-        margin: 0 auto;
-        display: inline-flex;
-        justify-content: center;
-    }
-    .button {
-        display: block;
-        position: relative;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 3px;
-        margin-top: 10px;
-        margin-left: 1px;
-        margin-right: 1px;
-        font-size: 12px;
-        text-align: center;
-        color: #fff;
-        background: #ee8a65;
-        font-family: sans-serif;
-        font-weight: bold;
-    }
-</style>
-</head>
-<body>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
-<link
-rel="stylesheet"
-href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
-type="text/css"
-/>
-<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"/>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
-<link
-rel="stylesheet"
-href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
-type="text/css"
-/>
+<link href="{{ asset('css/categories.css') }}" rel="stylesheet">
+<link href="{{ asset('css/activities.css') }}" rel="stylesheet">
 <div class="container" style="margin-top: 2rem">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div id="map"></div>
-                <ul id="buttons">
-                    <li id="button-en" class="button">English</li>
-                    <li id="button-ru" class="button">Russian</li>
-                    <li id="button-es" class="button">Spanish</li>
-                </ul>
+            <div class="categories" id="categories"></div>
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+                <span class="input-group-text"><i class="fa fa-search"></i></span>
+              </div>
+            <div class="">
+                <ul class="activities" id="activities"></ul>
             </div>
         </div>
     </div>
 </div>
-
+<script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
 <script>
-    // TO MAKE THE MAP APPEAR YOU MUST
-    // ADD YOUR ACCESS TOKEN FROM
-    // https://account.mapbox.com
-    $(document).ready(function(){
-        mapboxgl.accessToken = 'pk.eyJ1IjoicmFmYWVsZHRtIiwiYSI6ImNrbDJvN2txYjBiZWwybnBrd3NuYmhyeWsifQ.sDFeVOhqOGPqvPsE1u6-yA';
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [-71.91613, 9.00238],
-            zoom: 14
+
+    function init(){
+        categoriesList();
+        activitiesList();
+    }
+
+    async function categoriesList() {
+        var url = "{{ route('categories-list') }}"
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
+        await jQuery.ajax( {
+            type: 'GET',
+            url: url,
+            "data": { "_token": "{{ csrf_token() }}" },
+            "dataType": "JSON",
+            success: function( data ) {
+                data.forEach( function(value, index) {
+                    var category = `<div class="category">
+                        <div class="icon">
+                            <i class="fa `+data[index].icon+`"></i>
+                        </div>
+                        <div class="name">
+                            <p>`+data[index].name+`</p>
+                        </div>
+                    </div>`;
+                    $("#categories").append(category);
+                });
+            }
+        } );
+    }
 
-        document.getElementById('buttons').addEventListener('click', function (event) {
-            var language = event.target.id.substr('button-'.length);
-            // Use setLayoutProperty to set the value of a layout property in a style layer.
-            // The three arguments are the id of the layer, the name of the layout property,
-            // and the new property value.
-            map.setLayoutProperty('country-label', 'text-field', [
-                'get',
-                'name_' + language
-            ]);
+    async function activitiesList() {
+        var url = "{{ route('activities-list') }}"
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
+        await jQuery.ajax( {
+            type: 'GET',
+            url: url,
+            "data": { "_token": "{{ csrf_token() }}" },
+            "dataType": "JSON",
+            success: function( data ) {
+                data.forEach( function(value, index) {
+                    var id = data[index].id;
+                    var url = "{{ route('activity',1)}}";
+                    url = url.substr(0, url.length -1);
+                    url = url + id;
+                    var activity = `<a href="`+url+`"><li class="activity card">
+                        <div class="icon columns1-4">
+                            <i class="fa `+data[index].icon+`"></i>
+                        </div>
+                        <div class="name columns3-4">
+                            <p>`+data[index].name+`</p>
+                        </div>
+                    </li></a>`;
+                    $("#activities").append(activity);
+                });
+            }
+        } );
+    }
 
-        var origin = [];
-        var destinaion = [];
-
-        var directions = new MapboxDirections({
-            accessToken: mapboxgl.accessToken,
-            unit: "metric",
-            language: "es"
-        });
-        map.addControl(
-            directions,
-            'top-left'
-        );
-
-        var geolocate = new mapboxgl.GeolocateControl({
-            accessToken: mapboxgl.accessToken,
-        });
-
-        map.addControl(geolocate);
-
-        geolocate.on('geolocate', function(e) {
-            var lon = e.coords.longitude;
-            var lat = e.coords.latitude
-            origin = [lon, lat];
-            directions.setOrigin(origin);
-            getClimate(origin);
-            getElevation(origin);
-        });
-
-        var geocoder = new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            marker: false
-        });
-
-        map.addControl(geocoder);
-        geocoder.on('result', function(e) {
-            destinaion = e.result.geometry.coordinates;
-            directions.setDestination(destinaion);
-            getClimate(destinaion);
-            getElevation(destinaion);
-        });
-
-        directions.on('route', function(e) {
-            console.log(e);
-        });
-
-        directions.on('origin', function(e) {
-            getElevation(e.feature.geometry.coordinates);
-        });
-
-        directions.on('destination', function(e) {
-            getElevation(e.feature.geometry.coordinates);
-        });
-
-        function getClimate(latLon) {
-            jQuery.ajax( {
-                type: 'GET',
-                url: "https://api.openweathermap.org/data/2.5/weather?lat="+latLon[1]+"&lon="+latLon[0]+"&lang=es&units=metric&appid=d501d7588e367900e084418b8b24deab",
-                success: function( data ) {
-                    console.log(data);
-                }
-            } );
-        }
-
-
-
-        function getElevation(latLon) {
-            // make API request
-            var query = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + latLon[0] + ',' + latLon[1] + '.json?layers=contour&limit=50&access_token=' + mapboxgl.accessToken;
-            $.ajax({
-                method: 'GET',
-                url: query,
-            }).done(function(data) {
-                var allFeatures = data.features;
-                // Create an empty array to add elevation data to
-                var elevations = [];
-                // For each returned feature, add elevation data to the elevations array
-                for (i = 0; i < allFeatures.length; i++) {
-                    elevations.push(allFeatures[i].properties.ele);
-                }
-                // In the elevations array, find the largest value
-                var highestElevation = Math.max(...elevations);
-                // Display the largest elevation value
-                console.log(highestElevation + ' meters');
-            });
-        }
-
-    });
+    init();
 </script>
 @endsection

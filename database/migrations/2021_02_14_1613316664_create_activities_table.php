@@ -15,8 +15,8 @@ class CreateActivitiesTable extends Migration
 		    $table->text('name');
 		    $table->text('description')->nullable();
 		    $table->text('icon')->nullable();
-		    $table->float('distance')->nullable();
-		    $table->float('duration')->nullable();
+		    $table->decimal('distance', 10,5)->nullable();
+		    $table->decimal('duration', 10,5)->nullable();
 		    $table->integer('dificulty',)->nullable();
 		    $table->text('perfil')->nullable();
 		    $table->bigInteger('id_point_a',false)->unsigned();
