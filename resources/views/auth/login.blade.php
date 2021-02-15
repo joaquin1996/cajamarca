@@ -78,10 +78,7 @@
                             <i class="fa fa-envelope-o"></i>
                         </a>
                 </div>
-                <div class="registrate">
-                    ¿Aun no tienes una cuenta? <a href="{{ route('register') }}">Registrate</a>
-                </div>
-
+                
                 <div class="registrate">
                     ¿Aun no tienes una cuenta? <a href="{{ route('register') }}">Registrate</a>
                 </div>
