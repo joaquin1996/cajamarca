@@ -16,6 +16,14 @@
             </div>
         </div>
     </div>
+    <!-- desplegar menu -->
+    <nav  class="navbar">
+        <!-- Brand -->
+        <a id="create-activity" class="navbar-brand menu-boton create-activity" href="{{ route('create-activity') }}">
+          <i class="fa fa-plus"></i>
+        </a>
+    </nav>
+    <!-- end desplegar menu -->
 </div>
 <script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
 <script>

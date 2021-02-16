@@ -42,3 +42,16 @@
 .columns3-4 {
     width: 70.5%;
 }
+
+.create-activity {
+    position: relative;
+    top: -3rem!important;
+}
+
+.save-activity {
+    position: relative;
+    bottom: -25rem!important;
+    z-index: 9999;
+    margin-left: 100%;
+    color: black;
+}

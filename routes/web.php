@@ -44,5 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('activities-list',[ActivitiesController::class, 'list'])->name('activities-list');
         //rutas para obtener la actividad especifica
         Route::get('activity/{id}',[LugaresController::class, 'show'])->name('activity');
+        //rutas para crear una actividad
+        Route::get('create-activity',[ActivitiesController::class, 'create'])->name('create-activity');
+        //rutas para guardar una actividad
+        Route::post('save-activity',[ActivitiesController::class, 'store'])->name('save-activity');
     });
 });
