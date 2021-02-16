@@ -320,13 +320,20 @@ margin-left: 0;
 }
 
 .activities .name {
-  width: 70%;
+  width: 60%;
   color: white;
 }
 
-.activities .flecha {
-  font-size: 1.6rem;
-  color: #27ca56;
+.activities .boton {
+  color: #0099dd;
+  font-size: 1.3rem;
+  margin: 2px;
+  margin-right: 7px;
+}
+
+.activities .botones {
+  width: 20%;
+  
 }
 
 .activities .row {
@@ -433,4 +440,28 @@ a.mapboxgl-ctrl-logo {
 .carousel .carousel-indicators li {
   height: 1rem;
   width: 1rem;
+}
+
+
+.breadcumb {
+  background: #003d2b;
+    color: white;
+    box-shadow: 0px 0px 8px 0px white;
+    margin: 0;
+    padding-left: 15px;
+}
+
+.breadcumb div {
+  text-align: center;  
+  border-right: 2px solid #ffffff59;
+    padding: 0px 40px;
+}
+
+.agregar {
+  float: right;
+  border: none !important;
+}
+
+.create-activity {
+  color: white;
 }
