@@ -8,7 +8,7 @@ $(".menu-toggle").click(function(e) {
 
 // Testimonials carousel (uses the Owl Carousel library)
 $(".testimonials-carousel").owlCarousel({
-    autoplay: false,
+    autoplay: true,
     dots: false,
     loop: true,    
     responsive: {
@@ -16,14 +16,16 @@ $(".testimonials-carousel").owlCarousel({
         items: 3
       },
       768: {
-        items: 4
+        items: 6
       },
       900: {
-        items: 6
+        items: 8
       }
     },
     nav: true,
     navText : ["<i class='ion ion-ios-arrow-back'></i>","<i class='ion ion-ios-arrow-forward'></i>"],
   });
 
-  
+  $('.carousel').carousel({
+    autoplay: false,
+  }) 
