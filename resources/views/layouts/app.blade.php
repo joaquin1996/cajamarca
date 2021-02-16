@@ -18,6 +18,8 @@
     <link href="{{ asset('vendor/mdbootstrap/mdb.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/ionicons.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/owl.carousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/dropzone.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
 </head>
@@ -38,7 +40,7 @@
       </div>
 
       <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item">
+        <a href="/home/lugares" class="list-group-item">
           <img src="{{ asset('img/icons/lugares.png') }}" alt=""> LUGARES
         </a>
         
@@ -92,4 +94,8 @@
 <script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('vendor/mdbootstrap/mdb.min.js') }}"></script>
+<script src="{{ asset('vendor/owl.carousel/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('js/dropzone.js') }}"></script>
 <script src="{{ asset('js/main.js') }}"></script>
+
+@yield('scripts')

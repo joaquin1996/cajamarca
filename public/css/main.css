@@ -236,3 +236,105 @@ margin-left: 0;
 .logo-welcome img {
   width: 4rem;
 }
+
+.mapboxgl-canvas {
+  width: 100% !important;
+}
+
+.mapboxgl-ctrl-geocoder input[type='text'] {
+  padding: 10px 10px 10px 30px !important;
+}
+
+.mapbox-directions-profile label {
+  margin-bottom: 0px !important;
+}
+
+/* //////////////////////////// */
+/* estilos lugares */ 
+
+.category {
+    text-align: center;
+    color: white;
+}
+
+.category .icon {
+  padding: 10px;
+}
+
+.owl-carousel .owl-item img {
+  display: block;
+  width: 60%;
+  margin: auto;
+}
+
+.owl-nav {
+  position: absolute;
+    top: 25%;
+    width: 100%
+}
+
+.owl-nav .owl-next{
+  float: right ;
+  outline: none;
+}
+
+.owl-nav .owl-prev{
+  outline: none;
+}
+
+.owl-nav i {
+  color: white;
+  font-size: 1.5rem ;
+}
+
+.buscador input {
+  border-top-left-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+}
+
+.buscador button {
+  position: relative;
+    right: 2px;
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    background: white;
+    border: 1px solid #ced4da;
+  outline: none;
+}
+
+.activities {
+  margin-top: 2rem;
+}
+
+.activities ul li {
+  list-style: none;
+}
+
+.activities .icon {
+  width: 20%;
+}
+
+.activities .icon img {
+  margin: auto;
+}
+
+.activities .name {
+  width: 70%;
+  color: white;
+}
+
+.activities .flecha {
+  font-size: 1.6rem;
+  color: #27ca56;
+}
+
+.activities .row {
+  padding: 2rem 0rem;
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
+}
+
+.activities .row:hover {
+  background: #202931;
+}
+

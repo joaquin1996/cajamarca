@@ -65,11 +65,7 @@ type="text/css"
             <div class="card">
 
                 <div id="map"></div>
-                <ul id="buttons">
-                    <li id="button-en" class="button">English</li>
-                    <li id="button-ru" class="button">Russian</li>
-                    <li id="button-es" class="button">Spanish</li>
-                </ul>
+                
             </div>
         </div>
     </div>
@@ -86,17 +82,6 @@ type="text/css"
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [-71.91613, 9.00238],
             zoom: 14
-        });
-
-        document.getElementById('buttons').addEventListener('click', function (event) {
-            var language = event.target.id.substr('button-'.length);
-            // Use setLayoutProperty to set the value of a layout property in a style layer.
-            // The three arguments are the id of the layer, the name of the layout property,
-            // and the new property value.
-            map.setLayoutProperty('country-label', 'text-field', [
-                'get',
-                'name_' + language
-            ]);
         });
 
         var origin = [];

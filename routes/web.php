@@ -19,6 +19,10 @@ use App\Http\Controllers\LugaresController;
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
 
+// ruta para testear
+Route::get('/test', function () {
+    return view('test');
+});
 
 Route::get('/', function () {
     return view('auth/login');
@@ -44,5 +48,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('activities-list',[ActivitiesController::class, 'list'])->name('activities-list');
         //rutas para obtener la actividad especifica
         Route::get('activity/{id}',[LugaresController::class, 'show'])->name('activity');
+        // guardar imagenes mediante dropzone
+        Route::post('save_image', [ActivitiesController::class, 'save_image']);
+
     });
 });
+
+
