@@ -48,9 +48,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('activities-list',[ActivitiesController::class, 'list'])->name('activities-list');
         //rutas para obtener la actividad especifica
         Route::get('activity/{id}',[LugaresController::class, 'show'])->name('activity');
-        // guardar imagenes mediante dropzone
-        Route::post('save_image', [ActivitiesController::class, 'save_image']);
-
+        //rutas para crear una actividad
+        Route::get('create-activity',[ActivitiesController::class, 'create'])->name('create-activity');
+        //rutas para guardar una actividad
+        Route::post('save-activity',[ActivitiesController::class, 'store'])->name('save-activity');
+        //rutas para editar la actividad
+        Route::get('edit-activity/{id}',[ActivitiesController::class, 'edit'])->name('edit-activity');
+        //rutas para actualizar una actividad
+        Route::post('update-activity',[ActivitiesController::class, 'update'])->name('update-activity');
+        //rutas para eliminar una actividad
+        Route::post('delete-activity',[ActivitiesController::class, 'destroy'])->name('delete-activity');
     });
 });
 
