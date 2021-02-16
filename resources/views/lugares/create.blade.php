@@ -291,9 +291,11 @@ type="text/css"
 
         async function getClimate(latLon) {
             var climate = {};
+            var apiId = "70136aa43543e25de4d3e5d81b999cc7";
             await jQuery.ajax( {
                 type: 'GET',
-                url: "https://api.openweathermap.org/data/2.5/weather?lat="+latLon[1]+"&lon="+latLon[0]+"&lang=es&units=metric&appid=d501d7588e367900e084418b8b24deab",
+                //url: "https://api.openweathermap.org/data/2.5/weather?lat="+latLon[1]+"&lon="+latLon[0]+"&lang=es&units=metric&appid=d501d7588e367900e084418b8b24deab",
+                url: "https://api.openweathermap.org/data/2.5/weather?lat="+latLon[1]+"&lon="+latLon[0]+"&lang=es&units=metric&appid="+apiId,
                 success: function( data ) {
                     climate = {
                         "temp":data.main.temp,
@@ -302,7 +304,10 @@ type="text/css"
                     }
                 },
                 error: function( data ) {
-                    getClimate(latLon);
+                    console.log('Error obteniendo el clima...');
+                    setTimeout(async function(){
+                        await getClimate(latLon);
+                    },10000);
                 }
             } );
 
@@ -321,7 +326,10 @@ type="text/css"
                     }
                 },
                 error: function( data ) {
-                    getHumanInfo(latLon);
+                    console.log('Error obteniendo la información de nombres...');
+                    setTimeout(async function(){
+                        await getHumanInfo(latLon);
+                    },10000);
                 }
             } );
 
@@ -349,7 +357,10 @@ type="text/css"
                     elevation["elevation"]=highestElevation
                 },
                 error: function( data ) {
-                    getElevation(latLon);
+                    console.log('Error obteniendo la elevación...');
+                    setTimeout(async function(){
+                        await getElevation(latLon);
+                    },10000);
                 }
             });
             return await elevation;
