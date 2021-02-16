@@ -38,31 +38,31 @@ type="text/css"
                     <li data-target="#demo" data-slide-to="2"></li>
                     <li data-target="#demo" data-slide-to="3"></li>
                 </ul>
-            
+
                 <!-- The slideshow -->
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src="{{ asset('img/icons/user.png') }}" alt="...">
                         <h3>Perfil</h3>
-                        <strong>Pedestry</strong> 
+                        <strong>Pedestry</strong>
                     </div>
                     <div class="carousel-item">
                         <img src="{{ asset('img/icons/user.png') }}" alt="...">
                         <h3>Distancia</h3>
-                        <strong>1237.51000</strong> 
+                        <strong>1237.51000</strong>
                     </div>
                     <div class="carousel-item">
                         <img src="{{ asset('img/icons/user.png') }}" alt="...">
                         <h3>Duraci&oacute;n</h3>
-                        <strong>880.48600</strong> 
+                        <strong>880.48600</strong>
                     </div>
                     <div class="carousel-item">
                         <img src="{{ asset('img/icons/user.png') }}" alt="...">
                         <h3>Clima</h3>
-                        <strong>24.00</strong> 
+                        <strong>24.00</strong>
                     </div>
                 </div>
-            
+
                 <!-- Left and right controls -->
                 {{-- <a class="carousel-control-prev" href="#demo" data-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
@@ -70,11 +70,11 @@ type="text/css"
                 <a class="carousel-control-next" href="#demo" data-slide="next">
                     <span class="carousel-control-next-icon"></span>
                 </a> --}}
-            
+
             </div>
         </div>
 
-        
+
         <div class="col-md-12" id="map"></div>
     </div>
 </div>
@@ -113,6 +113,13 @@ type="text/css"
             directions,
             'top-left'
         );
+
+        map.on('load', async function() {
+            var origin = ["{{$point_a->lon}}", "{{$point_a->lat}}"];
+            var destination = ["{{$point_b->lon}}", "{{$point_b->lat}}"];
+            await directions.setOrigin(origin);
+            await directions.setDestination(destination);
+        });
 
         var geolocate = new mapboxgl.GeolocateControl({
             accessToken: mapboxgl.accessToken,

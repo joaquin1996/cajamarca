@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Activities;
 use Illuminate\Http\Request;
 use App\Models\Categories;
+use App\Models\Points;
+use Illuminate\Support\Facades\DB;
 
 class LugaresController extends Controller
 {
@@ -20,6 +22,8 @@ class LugaresController extends Controller
     {
         //retorn de la informacion
         $activity = Activities::find($id);
-        return view('lugares.places', ['activity' => $activity]);
+        $pointA = Points::find($activity->id_point_a);
+        $pointB = Points::find($activity->id_point_b);
+        return view('lugares.places', ['activity' => $activity, 'point_a' => $pointA, 'point_b' => $pointB]);
     }
 }
