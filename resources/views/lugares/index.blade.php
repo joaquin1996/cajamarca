@@ -1,91 +1,176 @@
 @extends('layouts.app')
 
 @section('content')
-<script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
-<style>
-	body { margin: 0; padding: 0; }
-	#map { position: absolute; top: 0; bottom: 0; width: 100%; height: 500px;}
-</style>
-</head>
-<body>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
-<link
-rel="stylesheet"
-href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
-type="text/css"
-/>
-<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"/>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
-<link
-rel="stylesheet"
-href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
-type="text/css"
-/>
+<link href="{{ asset('css/categories.css') }}" rel="stylesheet">
+<link href="{{ asset('css/activities.css') }}" rel="stylesheet">
 <div class="container" style="margin-top: 2rem">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div id="map"></div>
+            <div class="categories" id="categories"></div>
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+                <span class="input-group-text"><i class="fa fa-search"></i></span>
+              </div>
+            <div class="">
+                <ul class="activities" id="activities"></ul>
             </div>
         </div>
     </div>
+    <!-- desplegar menu -->
+    <nav  class="navbar">
+        <!-- Brand -->
+        <a id="create-activity" class="navbar-brand menu-boton create-activity" href="{{ route('create-activity') }}">
+          <i class="fa fa-plus"></i>
+        </a>
+
+    </nav>
+    <!-- end desplegar menu -->
 </div>
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+<script src="//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
+<script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
 <script>
-    // TO MAKE THE MAP APPEAR YOU MUST
-    // ADD YOUR ACCESS TOKEN FROM
-    // https://account.mapbox.com
-    $(document).ready(function(){
-        mapboxgl.accessToken = 'pk.eyJ1IjoicmFmYWVsZHRtIiwiYSI6ImNrbDJvN2txYjBiZWwybnBrd3NuYmhyeWsifQ.sDFeVOhqOGPqvPsE1u6-yA';
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [-71.91613, 9.00238],
-            zoom: 14
+
+    function init(){
+        categoriesList();
+        activitiesList();
+    }
+
+    async function categoriesList() {
+        var url = "{{ route('categories-list') }}"
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
+        await jQuery.ajax( {
+            type: 'GET',
+            url: url,
+            "data": { "_token": "{{ csrf_token() }}" },
+            "dataType": "JSON",
+            success: function( data ) {
+                data.forEach( function(value, index) {
+                    var category = `<div class="category">
+                        <div class="icon">
+                            <i class="fa `+data[index].icon+`"></i>
+                        </div>
+                        <div class="name">
+                            <p>`+data[index].name+`</p>
+                        </div>
+                    </div>`;
+                    $("#categories").append(category);
+                });
+            }
+        } );
+    }
 
-        var origin = [];
-        var destinaion = [];
-
-        var directions = new MapboxDirections({
-            accessToken: mapboxgl.accessToken
+    async function activitiesList() {
+        var url = "{{ route('activities-list') }}"
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
-        map.addControl(
-            directions,
-            'top-left'
-        );
+        await jQuery.ajax( {
+            type: 'GET',
+            url: url,
+            "data": { "_token": "{{ csrf_token() }}" },
+            "dataType": "JSON",
+            success: function( data ) {
+                data.forEach( function(value, index) {
+                    var id = data[index].id;
+                    var url = "{{ route('activity',1)}}";
+                    var urlEdit = "{{ route('edit-activity',1)}}";
+                    url = url.substr(0, url.length -1);
+                    url = url + id;
+                    urlEdit = urlEdit.substr(0, urlEdit.length -1);
+                    urlEdit = urlEdit + id;
+                    var activity = `<a href="`+url+`"><li class="activity card">
+                        <div class="icon columns1-4">
+                            <i class="fa `+data[index].icon+`"></i>
+                        </div>
+                        <div class="name columns3-4">
+                            <p>`+data[index].name+`</p>
+                        </div>
+                        <div class="name columns3-4">
+                            <a href="`+urlEdit+`"><button><i class="fa fa-edit"></i></button></a>
+                            <button onclick="eliminar(`+id+`)"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li></a>`;
+                    $("#activities").append(activity);
+                });
+            }
+        } );
+    }
 
-        var geolocate = new mapboxgl.GeolocateControl({
-            accessToken: mapboxgl.accessToken,
+    async function eliminar( id ) {
+        Swal.fire({
+            title: 'Eliminar barco ',
+            icon: 'question',
+            text: '¿Esta seguro que deseas eliminar barco?',
+            showCancelButton: true,
+            showCloseButton: true,
+            cancelButtonColor: '#1b8eb7',
+            confirmButtonColor: '#f64846',
+            confirmButtonText: "<i class='fa fa-trash'></i>  Eliminar",
+            cancelButtonText: "<i class='fa fa-times'></i> Cancelar",
+        }).then( async (result) => {
+            if ( result.value ) {
+
+                /*-- Comienzo de la segunda alerta --*/
+
+                await Swal.fire({
+                    title: '¿Estas seguro?',
+                    icon: 'question',
+                    html: "<p style='color: red;'><strong>¿Esta seguro que desea elimiar este barco?</strong></p>",
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    confirmButtonColor: '#f64846',
+                    confirmButtonText: "<i class='fa fa-trash'></i> Sí, !Estoy seguro!",
+                    cancelButtonColor: '#1b8eb7',
+                    cancelButtonText: "<i class='fa fa-times'></i> Cancelar",
+                }).then( async (result) => {
+                    if ( result.value ) {
+                       /*-- Comienzo de la función eliminar --*/
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                        await $.ajax({
+                            url: "{{ route('delete-activity') }}",
+                            type: 'POST',
+                            data: { id: id },
+                            success:function ( data ) {
+                                if ( data ) {
+                                    Swal.fire({
+                                        title: 'Se elimino el barco',
+                                        icon: 'success',
+                                        showClass: {
+                                            popup: 'animated fadeInDown faster'
+                                        },
+                                        hideClass: {
+                                            popup: 'animated fadeOutUp faster'
+                                        },
+                                        html: "<p class='text-success'>Se elimino el barco</p>",
+                                        showConfirmButton: false,
+                                        timer:3000,
+                                    });
+                                   /*  setTimeout( function() {
+                                        window.location='/buques';
+                                    }, 3000 ); */
+                                }
+                            }
+                        })
+                    }
+                } );
+
+                /*-- Fin de la segunda alerta --*/
+            }
         });
+    }
 
-        map.addControl(geolocate);
-
-        geolocate.on('geolocate', function(e) {
-            var lon = e.coords.longitude;
-            var lat = e.coords.latitude
-            origin = [lon, lat];
-            directions.setOrigin(origin);
-        });
-
-        var geocoder = new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            marker: false
-        });
-
-        map.addControl(geocoder);
-        geocoder.on('result', function(e) {
-            destinaion = e.result.geometry.coordinates;
-            directions.setDestination(destinaion);
-        });
-
-
-    });
+    init();
 </script>
 @endsection

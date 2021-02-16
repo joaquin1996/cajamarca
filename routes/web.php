@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 // definir controladores para las rutas
 ///////////////////////////////////////////
 use App\Http\Controllers\LugaresController;
+use App\Http\Controllers\ActivitiesController;
+use App\Http\Controllers\CategoriesController;
 
 
 Route::get('/', function () {
@@ -33,8 +35,24 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // rutas para acceder con un usuario
 Route::group(['middleware' => 'auth'], function () {
     // establecemos el prefijo para el usar la app con los usuarios
-    Route::group(['prefix' => 'home'], function() { 
+    Route::group(['prefix' => 'home'], function() {
         // rutas para el modulo lugares
         Route::get('lugares',[LugaresController::class, 'index']);
+        //rutas para obtener los datos de las categorias
+        Route::get('categories-list',[CategoriesController::class, 'list'])->name('categories-list');
+        //rutas para obtener los datos de las actividades
+        Route::get('activities-list',[ActivitiesController::class, 'list'])->name('activities-list');
+        //rutas para obtener la actividad especifica
+        Route::get('activity/{id}',[LugaresController::class, 'show'])->name('activity');
+        //rutas para crear una actividad
+        Route::get('create-activity',[ActivitiesController::class, 'create'])->name('create-activity');
+        //rutas para guardar una actividad
+        Route::post('save-activity',[ActivitiesController::class, 'store'])->name('save-activity');
+        //rutas para editar la actividad
+        Route::get('edit-activity/{id}',[ActivitiesController::class, 'edit'])->name('edit-activity');
+        //rutas para actualizar una actividad
+        Route::post('update-activity',[ActivitiesController::class, 'update'])->name('update-activity');
+        //rutas para eliminar una actividad
+        Route::post('delete-activity',[ActivitiesController::class, 'destroy'])->name('delete-activity');
     });
 });
