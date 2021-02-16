@@ -19,6 +19,10 @@ use App\Http\Controllers\LugaresController;
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
 
+// ruta para testear
+Route::get('/test', function () {
+    return view('test');
+});
 
 Route::get('/', function () {
     return view('auth/login');
@@ -56,3 +60,5 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('delete-activity',[ActivitiesController::class, 'destroy'])->name('delete-activity');
     });
 });
+
+

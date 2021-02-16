@@ -1,80 +1,93 @@
 @extends('layouts.app')
 
 @section('content')
-<script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
-<style>
-	body { margin: 0; padding: 0; }
-	#map { position: absolute; top: 0; bottom: 0; width: 100%; height: 500px;}
-    #buttons {
-        width: 90%;
-        margin: 0 auto;
-        display: inline-flex;
-        justify-content: center;
-    }
-    .button {
-        display: block;
-        position: relative;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 3px;
-        margin-top: 10px;
-        margin-left: 1px;
-        margin-right: 1px;
-        font-size: 12px;
-        text-align: center;
-        color: #fff;
-        background: #ee8a65;
-        font-family: sans-serif;
-        font-weight: bold;
-    }
-</style>
-</head>
-<body>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
 <link
 rel="stylesheet"
 href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
 type="text/css"
 />
-<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"/>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+
 <link
 rel="stylesheet"
 href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
 type="text/css"
 />
+
 <div class="container" style="margin-top: 2rem">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div>
-                    <i class="fa fa-man"></i>
+    <div class="justify-content-center">
+        <div class="row details">
+            <div class="row col-md-6 info">
+                <img src="{{ asset('img/icons/user.png') }}" alt="">
+                <div class="d-flex align-items-center name">
+                    <div class="title">
+                        Cajamarca
+                    </div>
                 </div>
-                <div>
-                    <p>Titulo</p>
-                    <p>Categoria</p>
-                    <p>Descripcion</p>
+                <div class="description">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima suscipit consequatur recusandae, quaerat ducimus laboriosam nam aut odio repellendus labore doloremque impedit neque perspiciatis. Necessitatibus rem laborum autem! Odit, animi!
                 </div>
             </div>
-            <div class="card">
 
-                <div id="map"></div>
-                <ul id="buttons">
-                    <li id="button-en" class="button">English</li>
-                    <li id="button-ru" class="button">Russian</li>
-                    <li id="button-es" class="button">Spanish</li>
+            <div id="demo" class="col-md-6 carousel slide" data-ride="carousel">
+
+                <!-- Indicators -->
+                <ul class="carousel-indicators">
+                    <li data-target="#demo" data-slide-to="0" class="active"></li>
+                    <li data-target="#demo" data-slide-to="1"></li>
+                    <li data-target="#demo" data-slide-to="2"></li>
+                    <li data-target="#demo" data-slide-to="3"></li>
                 </ul>
+            
+                <!-- The slideshow -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ asset('img/icons/user.png') }}" alt="...">
+                        <h3>Perfil</h3>
+                        <strong>Pedestry</strong> 
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ asset('img/icons/user.png') }}" alt="...">
+                        <h3>Distancia</h3>
+                        <strong>1237.51000</strong> 
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ asset('img/icons/user.png') }}" alt="...">
+                        <h3>Duraci&oacute;n</h3>
+                        <strong>880.48600</strong> 
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ asset('img/icons/user.png') }}" alt="...">
+                        <h3>Clima</h3>
+                        <strong>24.00</strong> 
+                    </div>
+                </div>
+            
+                <!-- Left and right controls -->
+                {{-- <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#demo" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a> --}}
+            
             </div>
         </div>
+
+        
+        <div class="col-md-12" id="map"></div>
     </div>
 </div>
+@endsection
 
+
+@section('scripts')
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
 <script>
     // TO MAKE THE MAP APPEAR YOU MUST
     // ADD YOUR ACCESS TOKEN FROM
@@ -86,17 +99,6 @@ type="text/css"
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [-71.91613, 9.00238],
             zoom: 14
-        });
-
-        document.getElementById('buttons').addEventListener('click', function (event) {
-            var language = event.target.id.substr('button-'.length);
-            // Use setLayoutProperty to set the value of a layout property in a style layer.
-            // The three arguments are the id of the layer, the name of the layout property,
-            // and the new property value.
-            map.setLayoutProperty('country-label', 'text-field', [
-                'get',
-                'name_' + language
-            ]);
         });
 
         var origin = [];

@@ -273,4 +273,24 @@ class ActivitiesController extends Controller
         $activities = Activities::all();
         return response()->json( $activities, 200 );
     }
+
+    // guardar imagen con dropzone
+    public function save_image(Request $request) {
+                   
+        foreach ($request->file('file') as $item) {
+            $file = $item;
+            $name = time().$file->getClientOriginalName();
+            //guardar imagen
+            $file->move(public_path().'/uploads/photos',$name);
+                                      
+            # guardar registro en la base de datos
+            /* $insertar = new modelo();
+            $insertar->id_actividad = $request->id;
+            $insertar->photo = $name;
+            $insertar->save();  */
+        }
+
+        return Response($request->id);
+       
+    }
 }

@@ -1,110 +1,87 @@
 @extends('layouts.app')
 
 @section('content')
-<link href="{{ asset('css/categories.css') }}" rel="stylesheet">
-<link href="{{ asset('css/activities.css') }}" rel="stylesheet">
+<!-- breadcumb -->
+<div class="row breadcumb">
+    <div class="d-flex align-items-center">
+        Lugares <img src="{{ asset('img/icons/lugares-w.png') }}" style="padding: 10px" alt="">
+    </div>
+    <div class="d-flex align-items-center agregar">
+        <a id="create-activity" class="create-activity" href="{{ route('create-activity') }}">
+            Agregar        
+        <i class="fa fa-plus"></i>
+      </a>
+    </div>
+</div>
+<!-- end breadcumb -->
+
 <div class="container" style="margin-top: 2rem">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center">        
         <div class="col-md-12">
-            <div class="categories" id="categories"></div>
-            <div class="input-group">
-                <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
-                <span class="input-group-text"><i class="fa fa-search"></i></span>
-              </div>
-            <div class="">
-                <ul class="activities" id="activities"></ul>
+            <div class="owl-carousel testimonials-carousel">
+                @foreach ($categories as $item)
+                    <div class="testimonial-item" data-aos="fade-up">
+                        <div class="category">
+                            <div class="icon">
+                                <img src="{{ asset('img/icons/user.png') }}" alt="">
+                            </div>
+                            <div class="name">
+                                <p>{{$item->name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach                
+            </div>
+
+            <div class="input-group buscador">
+                <input type="text" class="form-control">
+                <button class="input-group-text"><i class="fa fa-search"></i></button>
+            </div>
+
+            <div class="col-md-12 activities">
+                <ul>
+                    @foreach ($activities as $item)
+                        <li>
+                            <div class="row">
+                                <a class="d-flex align-items-center icon" href="{{ route('activity',$item->id)}}">
+                                    <img src="{{ asset('img/icons/user.png') }}" alt="">
+                                </a>
+                                <a class="d-flex align-items-center name" href="{{ route('activity',$item->id)}}">
+                                    {{$item->name}}
+                                </a>
+                                <div class="d-flex align-items-center botones">
+                                    <a href="/home/edit-activity/{{$item->id}}" class="boton">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <i onclick="eliminar({{$item->id}})" class="fa fa-trash boton" 
+                                    style="position: relative; top: -1.5px;"></i>
+                                    <a href="{{ route('activity',$item->id)}}" class="boton">
+                                        <i class='ion ion-ios-arrow-forward'></i>
+                                    </a>
+                                </div>                                
+                            </div>
+                        </li>
+                    @endforeach
+                    
+                </ul>
             </div>
         </div>
     </div>
-    <!-- desplegar menu -->
-    <nav  class="navbar">
-        <!-- Brand -->
-        <a id="create-activity" class="navbar-brand menu-boton create-activity" href="{{ route('create-activity') }}">
-          <i class="fa fa-plus"></i>
-        </a>
-
-    </nav>
-    <!-- end desplegar menu -->
+    
 </div>
+
+@endsection
+
+@section('scripts')
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<!-- Optional: include a polyfill for ES6 Promises for IE11 -->
-<script src="//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
-<script src="{{ asset('vendor/jquery/jquery-3.3.1.min.js') }}"></script>
 <script>
 
-    function init(){
-        categoriesList();
-        activitiesList();
-    }
+const edit_env = (id) => {
+    this.preventDefault();
+}
 
-    async function categoriesList() {
-        var url = "{{ route('categories-list') }}"
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        await jQuery.ajax( {
-            type: 'GET',
-            url: url,
-            "data": { "_token": "{{ csrf_token() }}" },
-            "dataType": "JSON",
-            success: function( data ) {
-                data.forEach( function(value, index) {
-                    var category = `<div class="category">
-                        <div class="icon">
-                            <i class="fa `+data[index].icon+`"></i>
-                        </div>
-                        <div class="name">
-                            <p>`+data[index].name+`</p>
-                        </div>
-                    </div>`;
-                    $("#categories").append(category);
-                });
-            }
-        } );
-    }
-
-    async function activitiesList() {
-        var url = "{{ route('activities-list') }}"
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        await jQuery.ajax( {
-            type: 'GET',
-            url: url,
-            "data": { "_token": "{{ csrf_token() }}" },
-            "dataType": "JSON",
-            success: function( data ) {
-                data.forEach( function(value, index) {
-                    var id = data[index].id;
-                    var url = "{{ route('activity',1)}}";
-                    var urlEdit = "{{ route('edit-activity',1)}}";
-                    url = url.substr(0, url.length -1);
-                    url = url + id;
-                    urlEdit = urlEdit.substr(0, urlEdit.length -1);
-                    urlEdit = urlEdit + id;
-                    var activity = `<a href="`+url+`"><li class="activity card">
-                        <div class="icon columns1-4">
-                            <i class="fa `+data[index].icon+`"></i>
-                        </div>
-                        <div class="name columns3-4">
-                            <p>`+data[index].name+`</p>
-                        </div>
-                        <div class="name columns3-4">
-                            <a href="`+urlEdit+`"><button><i class="fa fa-edit"></i></button></a>
-                            <button onclick="eliminar(`+id+`)"><i class="fa fa-trash"></i></button>
-                        </div>
-                    </li></a>`;
-                    $("#activities").append(activity);
-                });
-            }
-        } );
-    }
-
-    async function eliminar( id ) {
+    function eliminar( id ) {
+        
         Swal.fire({
             title: 'Eliminar barco ',
             icon: 'question',
@@ -170,7 +147,5 @@
             }
         });
     }
-
-    init();
 </script>
 @endsection
