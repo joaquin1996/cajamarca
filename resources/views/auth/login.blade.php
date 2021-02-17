@@ -45,7 +45,7 @@
 							<i class="zmdi zmdi-eye icon-right"></i>
 						</span>
 						<input class="input100" type="password" name="password" id="password" required>
-                        <span class="focus-input100" data-placeholder="Contrase&ntilde;a"></span>                        
+                        <span class="focus-input100" data-placeholder="Contrase&ntilde;a"></span>
                     </div>
 
                     @error('email')
@@ -63,6 +63,11 @@
 							</button>
 						</div>
                     </div>
+
+                    <div class="recuperar">
+                        <span>Recuerdame me:</span>
+                        <input type="checkbox" name="remember">
+                    </div>
 				</form>
 
                 <div class="recuperar">
@@ -78,7 +83,7 @@
                             <i class="fa fa-envelope-o"></i>
                         </a>
                 </div>
-                
+
                 <div class="registrate">
                     ¿Aun no tienes una cuenta? <a href="{{ route('register') }}">Registrate</a>
                 </div>

@@ -34,7 +34,7 @@ class Activities extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_category', 'id_point_a', 'id_point_b', 'name', 'description', 'icon', 'distance', 'duration', 'dificulty', 'perfil', 'created_at', 'updated_at'];
+    protected $fillable = ['id_category', 'id_point_a', 'id_point_b', 'name', 'description', 'icon', 'distance', 'duration', 'dificulty', 'perfil', 'status','created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

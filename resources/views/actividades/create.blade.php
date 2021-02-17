@@ -8,7 +8,6 @@
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
-<link href="{{ asset('css/activities.css') }}" rel="stylesheet">
 <style>
 	body { margin: 0; padding: 0; }
 	#map { position: absolute; top: 0; bottom: 0; width: 100%; height: 500px;}
@@ -56,44 +55,81 @@ type="text/css"
                     <h4>Registrar Actividad</h4>
                 </div>
                 <div class="card-body">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Nombre" aria-label="Username" id="activity-name" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Descripción" aria-label="Username" id="activity-description" aria-describedby="basic-addon1">
-                    </div>
+                    <!-- rduarte, formulario para registrar la actividad -->
+                    <form method="POST" class="" action="{{ route('save-activity') }}" id="create_activity" enctype="multipart/form-data">
+                        @csrf
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Nombre" aria-label="Username" id="activity-name" name="name" aria-describedby="basic-addon1" value="" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Descripción" aria-label="Username" id="activity-description" name="description" aria-describedby="basic-addon1" value="" required>
+                        </div>
 
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="activity-icon">
-                        <label class="input-group-text" for="inputGroupFile02">Icon .png</label>
-                    </div>
-                    <div class="col-auto">
-                        <label for="inputPassword2" class="visually-hidden">Dificultad</label>
-                        <input type="number" class="form-control" id="activity-dificulty" placeholder="Password">
-                      </div>
-                    <select class="form-select" aria-label="Categories Select" id="categories-select">
-                        <option value="" selected>Elija una categoria</option>
-                    </select>
+                        <div class="input-group mb-3">
+                            <input type="file" class="form-control" id="activity-icon" name="file_0" required>
+                            <label class="input-group-text" for="inputGroupFile02" value="">Icon .png</label>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <label for="inputPassword2" class="form-control">Dificultad</label>
+                            <input type="number" class="form-control" id="activity-dificulty" name="dificulty" min="1" max="5" placeholder="Dificultad" value="1" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <select class="form-select form-control" aria-label="Categories Select" id="categories-select" name="category" required>
+                                <option value="" selected>Elija una categoria</option>
+                            </select>
+                        </div>
+                        <!-- Campos ocultos -->
+                        <input type="hidden" name="distance" id="distance" value=""/>
+                        <input type="hidden" name="duration" id="duration" value=""/>
+                        <input type="hidden" name="perfil" id="perfil" value=""/>
+                        <!-- Datos del origin -->
+                        <input type="hidden" name="data_origin_name" id="data_origin_name" value=""/>
+                        <input type="hidden" name="data_origin_description" id="data_origin_description" value=""/>
+                        <input type="hidden" name="data_origin_lon"  id="data_origin_lon" value=""/>
+                        <input type="hidden" name="data_origin_lat" id="data_origin_lat" value=""/>
+                        <div class="input-group mb-3">
+                            <label for="data_origin_elevation" class="form-control">Elevación</label>
+                            <input type="number" name="data_origin_elevation" id="data_origin_elevation" value="" min="0" step=".001" required/>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for="data_origin_elevation" class="form-control">Temperatura</label>
+                            <input type="number" name="data_origin_temp" id="data_origin_temp" value="" step=".001" required/>
+                        </div>
+                        <input type="hidden" name="data_origin_temp_min" id="data_origin_temp_min" value=""/>
+                        <input type="hidden" name="data_origin_temp_max" id="data_origin_temp_max" value=""/>
+
+                        <!-- Datos del destination -->
+                        <input type="hidden" name="data_destination_name" id="data_destination_name" value=""/>
+                        <input type="hidden" name="data_destination_description" id="data_destination_description" value=""/>
+                        <input type="hidden" name="data_destination_lon" id="data_destination_lon" value=""/>
+                        <input type="hidden" name="data_destination_lat" id="data_destination_lat" value=""/>
+                        <input type="hidden" name="data_destination_elevation" id="data_destination_elevation" value="" min="0"/>
+                        <input type="hidden" name="data_destination_temp" id="data_destination_temp" value=""/>
+                        <input type="hidden" name="data_destination_temp_min" id="data_destination_temp_min" value=""/>
+                        <input type="hidden" name="data_destination_temp_max" id="data_destination_temp_max" value=""/>
+                        <div class="input-group mb-3">
+                            <span>Para habilitar el boton de guardar tienes que completar el formulario y la ruta en el mapa</span>
+                        </div>
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-primary disabled" id="submit">
+                                Guardar Actividad
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="card">
-
                 <div id="map"></div>
             </div>
         </div>
     </div>
-    <!-- desplegar menu -->
-    <nav  class="navbar">
-        <!-- Brand -->
-        <a id="save-activity" class="navbar-brand menu-boton save-activity" href="#">
-          <i class="fa fa-save"></i>
-        </a>
-    </nav>
-    <!-- end desplegar menu -->
 </div>
 
 <script>
+    //espera a que l documento este listo
     $(document).ready( async function(){
+        //asginacion del api key a mapbox
         mapboxgl.accessToken = 'pk.eyJ1IjoicmFmYWVsZHRtIiwiYSI6ImNrbDJvN2txYjBiZWwybnBrd3NuYmhyeWsifQ.sDFeVOhqOGPqvPsE1u6-yA';
         var map = new mapboxgl.Map({
             container: 'map',
@@ -101,8 +137,19 @@ type="text/css"
             center: [-71.91613, 9.00238],
             zoom: 14
         });
+        //decalracion de variables
         var origin = [];
         var destinaion = [];
+        var data_origin = [];
+        var data_destination = [];
+        var elevation = 0;
+        var climate = [];
+        var humanInfo = [];
+        var distance = 0;
+        var duration = 0;
+        var perfil = 0;
+
+        //adicion de la caracteristica de direcciones al mapa
         var directions = new MapboxDirections({
             accessToken: mapboxgl.accessToken,
             unit: "metric",
@@ -112,6 +159,7 @@ type="text/css"
             directions,
             'top-left'
         );
+        //adición de la caracteristica de geolocalizacion
         var geolocate = new mapboxgl.GeolocateControl({
             accessToken: mapboxgl.accessToken,
         });
@@ -122,15 +170,8 @@ type="text/css"
             origin = [lon, lat];
             directions.setOrigin(origin);
         });
-        var distance = 0;
-        var duration = 0;
-        var perfil = 0;
-        var data_origin = [];
-        var data_destination = [];
-        var elevation = 0;
-        var climate = [];
-        var humanInfo = [];
 
+        //generacion de rutas
         await directions.on('route', async function(e) {
             if(e != '' && e != null && e != undefined) {
                 distance = e.route[0].distance;
@@ -142,140 +183,64 @@ type="text/css"
                     "lon": origin[0],
                     "lat": origin[1],
                 }
+                //seteo de campos dinamicamente
+                document.getElementById("distance").value = distance;
+                document.getElementById("duration").value = duration;
+                document.getElementById("perfil").value = perfil;
+                document.getElementById("data_origin_lon").value = origin[0];
+                document.getElementById("data_origin_lat").value = origin[1];
 
                 elevation = await getElevation(origin);
                 for (const [key, value] of Object.entries(elevation)) {
                     data_origin[key]=value;
+                    document.getElementById("data_origin_"+key).value = value;
                 }
                 climate = await getClimate(origin);
                 for (const [key, value] of Object.entries(climate)) {
                     data_origin[key]=value;
+                    document.getElementById("data_origin_"+key).value = value;
                 }
                 humanInfo = await getHumanInfo(origin);
                 for (const [key, value] of Object.entries(humanInfo)) {
                     data_origin[key]=value;
+                    document.getElementById("data_origin_"+key).value = value;
                 }
                 data_destination = {
                     "lon": destination[0],
                     "lat": destination[1],
                 }
+                //seteo de campos dinamicamente
+                document.getElementById("data_destination_lon").value = destination[0];
+                document.getElementById("data_destination_lat").value = destination[1];
+
                 elevation = await getElevation(destination);
                 for (const [key, value] of Object.entries(elevation)) {
                     data_destination[key]=value;
+                    document.getElementById("data_destination_"+key).value = value;
                 }
                 climate = await getClimate(destination);
                 for (const [key, value] of Object.entries(climate)) {
                     data_destination[key]=value;
+                    document.getElementById("data_destination_"+key).value = value;
                 }
                 humanInfo = await getHumanInfo(origin);
                 for (const [key, value] of Object.entries(humanInfo)) {
                     data_destination[key]=value;
+                    document.getElementById("data_destination_"+key).value = value;
                 }
+                $('#submit').removeClass('disabled');
             }
         });
 
-        await $('#save-activity').on('click', function(e){
-
-            e.preventDefault();
-            var name = $('#activity-name').val();
-            var description = $('#activity-description').val();
-            var file = $('#activity-icon')[0].files;
-            var dificulty = $('#activity-dificulty').val();
-            var category = $('#categories-select').val();
-            var data = new FormData();
-            if(name != '' && name != null && name != undefined) {
-                if(description != '' && description != null && description != undefined) {
-                    if(file != '' && file != null && file != undefined && file.length != 0) {
-                        if(dificulty != '' && dificulty != null && dificulty != undefined) {
-                            if(perfil != '' && perfil != null && perfil != undefined) {
-                                if(duration != '' && duration != null && duration != undefined) {
-                                    if(distance != '' && distance != null && distance != undefined) {
-                                        if(category != '' && category != null && category != undefined) {
-                                            if(data_origin.elevation != null && data_origin.elevation != undefined) {
-                                                if(data_origin.name != null && data_origin.name != undefined) {
-                                                    if(data_origin.temp != '' && data_origin.temp != null && data_origin.temp != undefined) {
-                                                        if(data_destination.elevation != null && data_destination.elevation != undefined) {
-                                                            if(data_origin.description != null && data_origin.description != undefined) {
-                                                                if(data_destination.temp != '' && data_destination.temp != null && data_destination.temp != undefined) {
-                                                                    jQuery.each(file, function(i, v) {
-                                                                        data.append('file_'+i, v);
-                                                                    });
-                                                                    data.append('name',name);
-                                                                    data.append('description',description);
-                                                                    data.append('dificulty', dificulty);
-                                                                    data.append('perfil', perfil);
-                                                                    data.append('distance', distance);
-                                                                    data.append('duration', duration);
-                                                                    data.append('category', category);
-                                                                    jQuery.each(data_origin, function(i, v) {
-                                                                        data.append('data_origin_'+i, v);
-                                                                    });
-                                                                    jQuery.each(data_destination, function(i, v) {
-                                                                        data.append('data_destination_'+i, v);
-                                                                    });
-                                                                    data.append('_token', "{{ csrf_token() }}");
-
-                                                                    $.ajaxSetup({
-                                                                        headers: {
-                                                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                        }
-                                                                    });
-                                                                    jQuery.ajax({
-                                                                        url: "{{ route('save-activity') }}",
-                                                                        data: data,
-                                                                        cache: false,
-                                                                        contentType: false,
-                                                                        processData: false,
-                                                                        method: 'POST',
-                                                                        type: 'POST', // For jQuery < 1.9
-                                                                        success: function(data){
-                                                                            console.log(data);
-                                                                        }
-                                                                    });
-                                                                } else {
-                                                                    console.log('error');
-                                                                }
-                                                            } else {
-                                                                console.log('error');
-                                                            }
-                                                        } else {
-                                                            console.log('error');
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.log('error');
-                                                    }
-                                                } else {
-                                                    console.log('error');
-                                            }
-                                            } else {
-                                                console.log('error');
-                                            }
-                                        } else {
-                                            console.log('error');
-                                        }
-                                    } else {
-                                        console.log('error');
-                                    }
-                                } else {
-                                    console.log('error');
-                                }
-                            } else {
-                                console.log('error');
-                            }
-                        } else {
-                            console.log('error');
-                        }
-                    } else {
-                        console.log('error');
-                    }
-                } else {
-                    console.log('error');
-                }
-            } else {
-                console.log('error');
+        $('#create_activity').submit(function(event){
+            if($('#data_destination_temp').val() == '') {
+                document.getElementById("data_origin_temp_min").value = $("#data_origin_temp").val();
+                document.getElementById("data_origin_temp_max").value = $("#data_origin_temp").val();
+                document.getElementById("data_destination_temp").value = $("#data_origin_temp").val();
+                document.getElementById("data_destination_temp_min").value = $("#data_origin_temp").val();
+                document.getElementById("data_destination_temp_max").value = $("#data_origin_temp").val();
             }
-        });
+        })
 
         async function getClimate(latLon) {
             var climate = {};

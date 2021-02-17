@@ -1,0 +1,35 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property integer $id
+ * @property string $name
+ * @property string $description
+ * @property boolean $status
+ * @property Category[] $categories
+ */
+class Places extends Model
+{
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'integer';
+
+    /**
+     * @var array
+     */
+    protected $fillable = ['name', 'description', 'status'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categories()
+    {
+        return $this->hasMany('App\Models\Category', 'place');
+    }
+}

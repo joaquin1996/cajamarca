@@ -14,6 +14,9 @@ class CreateCategoriesTable extends Migration
 		    $table->text('name');
 		    $table->text('description')->nullable();
 		    $table->text('icon')->nullable();
+            $table->bigInteger('place',false)->unsigned();
+            $table->foreign('place')->references('id')->on('places')->onDelete( 'cascade' )->onUpdate( 'cascade' );
+            $table->tinyInteger('status')->default('0');
             $table->timestamps();
         });
     }

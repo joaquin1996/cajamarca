@@ -7,6 +7,7 @@ use App\Models\Activities;
 use App\Models\Points;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\Redirect;
 
 class ActivitiesController extends Controller
 {
@@ -27,7 +28,7 @@ class ActivitiesController extends Controller
      */
     public function create()
     {
-        return view('lugares.create');
+        return view('actividades.create');
     }
 
     /**
@@ -118,10 +119,10 @@ class ActivitiesController extends Controller
             $activity->perfil = $request->perfil;
             $activity->save();
             DB::commit();
-            return response()->json( 'success', 200 );
+            return Redirect::route('lugares');
         } catch(Exception $e) {
-            return response()->json( $e, 200 );
             DB::rollBack();
+            return response()->json( $e, 200 );
         }
     }
 
@@ -131,9 +132,14 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    //rduarte, esta funccion returna la vista con todos los datos del lugar
     public function show($id)
     {
-
+        //retorn de la informacion
+        $activity = Activities::find($id);
+        $point_a = Points::find($activity->id_point_a);
+        $point_b = Points::find($activity->id_point_b);
+        return view('actividades.show', compact('activity','point_a','point_b'));
     }
 
     /**
@@ -145,9 +151,9 @@ class ActivitiesController extends Controller
     public function edit($id)
     {
         $activity = Activities::find($id);
-        $pointA = Points::find($activity->id_point_a);
-        $pointB = Points::find($activity->id_point_b);
-        return view('lugares.edit',['activity' => $activity, 'point_a' => $pointA, 'point_b' => $pointB]);
+        $point_a = Points::find($activity->id_point_a);
+        $point_b = Points::find($activity->id_point_b);
+        return view('actividades.edit', compact('activity','point_a','point_b'));
     }
 
     /**
@@ -239,7 +245,7 @@ class ActivitiesController extends Controller
             $activity->perfil = $request->perfil;
             $activity->save();
             DB::commit();
-            return response()->json( 'success', 200 );
+            return Redirect::route('lugares');
         } catch(Exception $e) {
             return response()->json( $e, 200 );
             DB::rollBack();
@@ -276,13 +282,13 @@ class ActivitiesController extends Controller
 
     // guardar imagen con dropzone
     public function save_image(Request $request) {
-                   
+
         foreach ($request->file('file') as $item) {
             $file = $item;
             $name = time().$file->getClientOriginalName();
             //guardar imagen
             $file->move(public_path().'/uploads/photos',$name);
-                                      
+
             # guardar registro en la base de datos
             /* $insertar = new modelo();
             $insertar->id_actividad = $request->id;
@@ -291,6 +297,6 @@ class ActivitiesController extends Controller
         }
 
         return Response($request->id);
-       
+
     }
 }

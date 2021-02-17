@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('provider_id')->nullable();
             $table->string('access_token')->nullable();
 
-            $table->tinyInteger('condition',false,1)->default('1')->unsigned();
+            $table->tinyInteger('status',false,1)->default('1')->unsigned();
 		    $table->bigInteger('idrol',false)->unsigned();
             $table->rememberToken();
             $table->timestamps();

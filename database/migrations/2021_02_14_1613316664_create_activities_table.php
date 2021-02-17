@@ -24,6 +24,7 @@ class CreateActivitiesTable extends Migration
 		    $table->foreign('id_category')->references('id')->on('categories')->onDelete( 'cascade' )->onUpdate( 'cascade' );
             $table->foreign('id_point_a')->references('id')->on('points')->onDelete( 'cascade' )->onUpdate( 'cascade' );
             $table->foreign('id_point_b')->references('id')->on('points')->onDelete( 'cascade' )->onUpdate( 'cascade' );
+            $table->tinyInteger('status')->default('0');
             $table->timestamps();
         });
     }
