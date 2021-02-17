@@ -13,6 +13,7 @@ class CreateGaleryTable extends Migration
             $table->bigInteger('activity',false)->unsigned();
             $table->text('file')->nullable();
             $table->foreign('activity')->references('id')->on('activities')->onDelete( 'cascade' )->onUpdate( 'cascade' );
+            $table->timestamps();
         });
     }
 

@@ -13,28 +13,21 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-head">
-                    <h4>Registrar Categoria</h4>
+                    <h4>Registrar Lugar</h4>
                 </div>
                 <div class="card-body">
                     <!-- rduarte, formulario para registrar la actividad -->
-                    <form method="POST" class="" action="{{ route('update-category') }}" id="update_category" enctype="multipart/form-data">
+                    <form method="POST" class="" action="{{ route('save-place') }}" id="create_place" enctype="multipart/form-data">
                         @csrf
                         <div class="input-group mb-3">
-                            <input type="hidden" name="id" value="{{$category->id}}">
-                            <input type="text" class="form-control" placeholder="Nombre" aria-label="Username" id="activity-name" name="name" aria-describedby="basic-addon1" value="{{$category->name}}" required>
+                            <input type="text" class="form-control" placeholder="Nombre" aria-label="Username" id="activity-name" name="name" aria-describedby="basic-addon1" value="" required>
                         </div>
                         <div class="input-group mb-3">
-                            <textarea cols="30" rows="5" class="form-control" placeholder="Descripción" aria-label="description" id="activity-description" name="description" aria-describedby="basic-addon1" value="" required style="resize: none">{{$category->description}}</textarea>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <input type="hidden" name="category_icon_actualy" value="{{$category->icon}}">
-                            <input type="file" class="form-control" id="activity-icon" name="file_0">
-                            <label class="input-group-text" for="inputGroupFile02" value="">Icon .png</label>
+                            <textarea cols="30" rows="5" class="form-control" placeholder="Descripción" aria-label="description" id="activity-description" name="description" aria-describedby="basic-addon1" value="" required style="resize: none"></textarea>
                         </div>
                         <div class="input-group mb-3">
                             <button type="submit" class="btn btn-primary" id="submit">
-                                Guardar Categoria
+                                Guardar Lugar
                             </button>
                         <div/>
                     </form>

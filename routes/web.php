@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LugaresController;
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\PlacesController;
 
 // ruta para testear
 Route::get('/test', function () {
@@ -73,6 +74,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update-category',[CategoriesController::class, 'update'])->name('update-category');
         //rutas para eliminar una categoria
         Route::post('delete-category',[CategoriesController::class, 'destroy'])->name('delete-category');
+
+        /* rutas para el modulo de lugares */
+        Route::get('places',[PlacesController::class, 'index'])->name('places');
+        // ruta para obtener una categoria en especifico
+        Route::get('place/{id}',[PlacesController::class, 'show'])->name('place');
+        //rutas para crear una categoria
+        Route::get('create-place',[PlacesController::class, 'create'])->name('create-place');
+        //rutas para guardar una categoria
+        Route::post('save-place',[PlacesController::class, 'store'])->name('save-place');
+        //rutas para editar la categoria
+        Route::get('edit-place/{id}',[PlacesController::class, 'edit'])->name('edit-place');
+        //rutas para actualizar una categoria
+        Route::post('update-place',[PlacesController::class, 'update'])->name('update-place');
+        //rutas para eliminar una categoria
+        Route::post('delete-place',[PlacesController::class, 'destroy'])->name('delete-place');
     });
 });
 

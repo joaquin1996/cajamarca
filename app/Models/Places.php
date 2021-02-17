@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,7 +23,7 @@ class Places extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'description', 'status'];
+    protected $fillable = ['name', 'description', 'status','created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

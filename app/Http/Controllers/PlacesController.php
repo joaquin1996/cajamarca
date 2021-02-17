@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Places;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Support\Facades\Redirect;
 
 class PlacesController extends Controller
 {
@@ -13,7 +17,8 @@ class PlacesController extends Controller
      */
     public function index()
     {
-        //
+        $places = Places::all();
+        return view('places.index', compact('places'));
     }
 
     /**
@@ -23,7 +28,7 @@ class PlacesController extends Controller
      */
     public function create()
     {
-        //
+        return view('places.create');
     }
 
     /**
@@ -34,7 +39,23 @@ class PlacesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+    		DB::beginTransaction();
+            $place = new Places();
+            $this->validate($request, [
+                'name' => 'required',
+                'description' => 'required',
+            ]);
+            $place->name = $request->name;
+            $place->description = $request->description;
+            $place->status = 0;
+            $place->save();
+            DB::commit();
+            return Redirect::route('places');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return response()->json( $e, 200 );
+        }
     }
 
     /**
@@ -45,7 +66,9 @@ class PlacesController extends Controller
      */
     public function show($id)
     {
-        //
+        //retorn de la informacion
+        $place = Places::find($id);
+        return view('places.show', compact('place'));
     }
 
     /**
@@ -56,7 +79,9 @@ class PlacesController extends Controller
      */
     public function edit($id)
     {
-        //
+        //retorn de la informacion
+        $place = Places::find($id);
+        return view('places.edit', compact('place'));
     }
 
     /**
@@ -66,9 +91,25 @@ class PlacesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try {
+    		DB::beginTransaction();
+            $place = Places::findOrFail($request->id);
+            $this->validate($request, [
+                'name' => 'required',
+                'description' => 'required',
+            ]);
+            $place->name = $request->name;
+            $place->description = $request->description;
+            $place->status = $request->status;
+            $place->save();
+            DB::commit();
+            return Redirect::route('places');
+        } catch(Exception $e) {
+            DB::rollBack();
+            return response()->json( $e, 200 );
+        }
     }
 
     /**
@@ -77,8 +118,16 @@ class PlacesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $place = Places::where('id', '=', $request->id )->delete();
+            DB::commit();
+            return response()->json( $place, 200 );
+        } catch ( Exception $e ) {
+            DB::rollBack();
+            return response()->json($e, 200 );
+        }
     }
 }

@@ -13,6 +13,7 @@ class CreatePlacesTable extends Migration
             $table->text('name')->nullable();
             $table->text('description')->nullable();
             $table->tinyInteger('status')->default('0');
+            $table->timestamps();
         });
     }
 
